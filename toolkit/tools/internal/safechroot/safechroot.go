@@ -369,6 +369,12 @@ func (c *Chroot) UnsafeRun(toRun func() error) (err error) {
 	logger.Log.Debugf("Entering Chroot: '%s'", c.rootDir)
 	err = unix.Chroot(c.rootDir)
 	if err != nil {
+		if err == unix.EPERM {
+			if err = unix.Unshare(unix.CLONE_NEWUSER); err != nil {
+				return
+			}
+			err = unix.Chroot(c.rootDir)
+		}
 		return
 	}
 	defer c.restoreRoot(originalRoot, originalWd)
