@@ -375,7 +375,9 @@ func (c *Chroot) UnsafeRun(toRun func() error) (err error) {
 			}
 			err = unix.Chroot(c.rootDir)
 		}
-		return
+		if err != nil {
+			return
+		}
 	}
 	defer c.restoreRoot(originalRoot, originalWd)
 
