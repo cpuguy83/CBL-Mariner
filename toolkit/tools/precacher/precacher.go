@@ -209,7 +209,7 @@ func createChroot(workerTar, chrootDir string, leaveChrootOnDisk bool) (queryChr
 
 	// Install the repoquery package from upstream
 	logger.Log.Infof("Installing '%s' package to get 'repoquery' command", dnfUtilsPackageName)
-	queryChroot.Run(func() error {
+	err = queryChroot.Run(func() error {
 		_, err = installutils.TdnfInstall(dnfUtilsPackageName, rootDir)
 		if err != nil {
 			err = fmt.Errorf("failed to install '%s':\n%w", dnfUtilsPackageName, err)
